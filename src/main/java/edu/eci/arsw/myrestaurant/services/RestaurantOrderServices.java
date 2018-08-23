@@ -7,12 +7,14 @@ package edu.eci.arsw.myrestaurant.services;
 
 import edu.eci.arsw.myrestaurant.model.Order;
 import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
+import java.util.Collection;
 import java.util.Set;
 
 /**
  *
  * @author hcadavid
  */
+
 public interface RestaurantOrderServices {
 
     void addNewOrderToTable(Order o) throws OrderServicesException;
@@ -24,6 +26,8 @@ public interface RestaurantOrderServices {
     RestaurantProduct getProductByName(String product) throws OrderServicesException;
 
     Order getTableOrder(int tableNumber);
+    
+    Collection<Order> getOrders() throws OrderServicesException;
 
     Set<Integer> getTablesWithOrders();
 
