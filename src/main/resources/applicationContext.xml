@@ -9,7 +9,4 @@
 
     <context:component-scan base-package="edu.eci.arsw" />
     
-    <bean id = "ros" class = "edu.eci.arsw.myrestaurant.services.RestaurantOrderServicesStub" />
-    <bean id = "calc" class = "edu.eci.arsw.myrestaurant.beans.impl.BasicBillCalculator" />
-    
 </beans>
