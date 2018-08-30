@@ -34,6 +34,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,10 +47,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/orders")
 public class OrdersAPIController {
-    
+
     @Autowired
     RestaurantOrderServices ros;
-    
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> GetOrderHandler() {
         try {
@@ -65,24 +66,24 @@ public class OrdersAPIController {
         Order order = ros.getTableOrder(idtable);
         HttpStatus status = HttpStatus.ACCEPTED;
         if (order == null) {
-            status = HttpStatus.NOT_FOUND;
+            status = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(order, status);
-        
+
     }
-    
-    @RequestMapping(method = RequestMethod.POST)    
-    public ResponseEntity<?> manejadorPostRecursoXX(@RequestBody Order order) {
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> PostOrderHandler(@RequestBody Order order) {
         try {
             ros.addNewOrderToTable(order);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (OrderServicesException ex) {
             Logger.getLogger(OrderServicesException.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("Error bla bla bla", HttpStatus.FORBIDDEN);            
-        }        
-        
+            return new ResponseEntity<>("Error bla bla bla", HttpStatus.FORBIDDEN);
+        }
+
     }
-    
+
     @RequestMapping("/{idtable}/total")
     public ResponseEntity<?> GetTotalHandler(@PathVariable int idtable) {
         Integer total = null;
@@ -90,9 +91,18 @@ public class OrdersAPIController {
         try {
             total = ros.calculateTableBill(idtable);
         } catch (OrderServicesException ex) {
-            status = HttpStatus.NOT_FOUND;
+            status = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(total, status);
-        
+
     }
+
+    @PutMapping("/{idTable}")
+    public ResponseEntity<?> PutProductHandler(@RequestBody RestaurantProduct product, @PathVariable int idTable) {
+        Order order = ros.getTableOrder(idTable);
+        order.addDish(product.getName(), 1);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
 }
