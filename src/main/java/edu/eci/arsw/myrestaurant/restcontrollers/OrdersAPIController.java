@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author hcadavid
  */
-
 @RestController
 @RequestMapping(value = "/orders")
 public class OrdersAPIController {
@@ -60,27 +59,40 @@ public class OrdersAPIController {
             return new ResponseEntity<>("Error bla bla bla", HttpStatus.NOT_FOUND);
         }
     }
+
     @RequestMapping("/{idtable}")
     public ResponseEntity<?> GetOrderHandler(@PathVariable int idtable) {
         Order order = ros.getTableOrder(idtable);
         HttpStatus status = HttpStatus.ACCEPTED;
-        if(order == null){
+        if (order == null) {
             status = HttpStatus.NOT_FOUND;
         }
         return new ResponseEntity<>(order, status);
         
     }
     
-    @RequestMapping(method = RequestMethod.POST)	
-	public ResponseEntity<?> manejadorPostRecursoXX(@RequestBody Order order){
-		try {
-			ros.addNewOrderToTable(order);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		} catch (OrderServicesException ex) {
-			Logger.getLogger(OrderServicesException.class.getName()).log(Level.SEVERE, null, ex);
-			return new ResponseEntity<>("Error bla bla bla",HttpStatus.FORBIDDEN);            
-		}        
-	
-	}
+    @RequestMapping(method = RequestMethod.POST)    
+    public ResponseEntity<?> manejadorPostRecursoXX(@RequestBody Order order) {
+        try {
+            ros.addNewOrderToTable(order);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (OrderServicesException ex) {
+            Logger.getLogger(OrderServicesException.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error bla bla bla", HttpStatus.FORBIDDEN);            
+        }        
+        
+    }
+    
+    @RequestMapping("/{idtable}/total")
+    public ResponseEntity<?> GetTotalHandler(@PathVariable int idtable) {
+        Integer total = null;
+        HttpStatus status = HttpStatus.ACCEPTED;
+        try {
+            total = ros.calculateTableBill(idtable);
+        } catch (OrderServicesException ex) {
+            status = HttpStatus.NOT_FOUND;
+        }
+        return new ResponseEntity<>(total, status);
+        
+    }
 }
-
