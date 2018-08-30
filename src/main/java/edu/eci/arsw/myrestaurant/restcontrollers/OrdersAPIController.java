@@ -33,6 +33,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +53,7 @@ public class OrdersAPIController {
     RestaurantOrderServices ros;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> GetOrderHandler() {
+    public ResponseEntity<?> getOrderHandler() {
         try {
             return new ResponseEntity<>(ros.getOrders(), HttpStatus.ACCEPTED);
         } catch (OrderServicesException ex) {
@@ -62,7 +63,7 @@ public class OrdersAPIController {
     }
 
     @RequestMapping("/{idtable}")
-    public ResponseEntity<?> GetOrderHandler(@PathVariable int idtable) {
+    public ResponseEntity<?> getOrderHandler(@PathVariable int idtable) {
         Order order = ros.getTableOrder(idtable);
         HttpStatus status = HttpStatus.ACCEPTED;
         if (order == null) {
@@ -71,9 +72,10 @@ public class OrdersAPIController {
         return new ResponseEntity<>(order, status);
 
     }
-
+    //Example code Linux
+    //curl -i -X POST -HContent-Type:application/json -HAccept:application/json http://localhost:8080/orders -d '{"orderAmountsMap":{"FISH":1,"POTATOES":5},"tableNumber":5}'
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> PostOrderHandler(@RequestBody Order order) {
+    public ResponseEntity<?> postOrderHandler(@RequestBody Order order) {
         try {
             ros.addNewOrderToTable(order);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -85,7 +87,7 @@ public class OrdersAPIController {
     }
 
     @RequestMapping("/{idtable}/total")
-    public ResponseEntity<?> GetTotalHandler(@PathVariable int idtable) {
+    public ResponseEntity<?> getTotalHandler(@PathVariable int idtable) {
         Integer total = null;
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
@@ -96,13 +98,28 @@ public class OrdersAPIController {
         return new ResponseEntity<>(total, status);
 
     }
-
+    //Example code Linux: 
+    //curl -i -X PUT -HContent-Type:application/json -HAccept:application/json http://localhost:8080/orders/1 -d '{"price":20,"name":"MILK","type":"DRINK"}' 
     @PutMapping("/{idTable}")
-    public ResponseEntity<?> PutProductHandler(@RequestBody RestaurantProduct product, @PathVariable int idTable) {
+    public ResponseEntity<?> putProductHandler(@RequestBody RestaurantProduct product, @PathVariable int idTable) {
         Order order = ros.getTableOrder(idTable);
         order.addDish(product.getName(), 1);
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
+    
+    @DeleteMapping("/{idTable}")
+    public ResponseEntity<?> deleteProductHandler(@PathVariable int idTable) {
+        HttpStatus status;
+        try {
+            ros.releaseTable(idTable);
+            status = HttpStatus.ACCEPTED;
+        } catch (OrderServicesException ex) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(status);
+
+    }
+    
 
 }
