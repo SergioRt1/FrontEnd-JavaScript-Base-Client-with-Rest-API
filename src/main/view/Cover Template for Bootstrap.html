@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- saved from url=(0050)https://getbootstrap.com/docs/4.0/examples/cover/# -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -7,6 +8,7 @@
         <meta name="author" content="">
         <link rel="icon" href="https://getbootstrap.com/favicon.ico">
         <script type="text/javascript" src="js/OrdersController.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
         <title>Cover Template for Bootstrap</title>
 
@@ -17,7 +19,7 @@
         <link href="./Cover Template for Bootstrap_files/cover.css" rel="stylesheet">
     </head>
 
-    <body class="text-center">
+    <body class="text-center" onload="loadOrders();">
 
         <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
             <header class="masthead mb-auto">
@@ -32,7 +34,7 @@
 
             <main role="main" class="inner cover">
                 <h1 class="cover-heading">Order</h1>
-                <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+                <p class="lead">Your orders will displayed below, we hope you enjoy the dishes</p>
                 <table style="width:100%">
                     <tr>
                         <th>Product</th>
@@ -55,7 +57,7 @@
                         <td>$1300</td>
                     </tr>
                 </table>
-                <button onclick="addOrder()" >Add order</button>
+                <button onclick="loadOrders()" >Add order</button>
                 <table style="width:100%" id="tableOrder">
                     
                 </table>
