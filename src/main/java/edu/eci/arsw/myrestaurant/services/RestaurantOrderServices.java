@@ -30,6 +30,8 @@ public interface RestaurantOrderServices {
     Collection<Order> getOrders() throws OrderServicesException;
 
     Set<Integer> getTablesWithOrders();
+    
+    Collection<RestaurantProduct> getProducts() throws OrderServicesException;
 
     void releaseTable(int tableNumber) throws OrderServicesException;
     

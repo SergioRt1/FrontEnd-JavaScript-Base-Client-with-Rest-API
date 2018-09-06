@@ -115,4 +115,9 @@ public class RestaurantOrderServicesStub implements RestaurantOrderServices {
         return tableOrders.values();
     }
 
+    @Override
+    public Collection<RestaurantProduct> getProducts() throws OrderServicesException{
+        return productsMap.values();
+    }
+
 }

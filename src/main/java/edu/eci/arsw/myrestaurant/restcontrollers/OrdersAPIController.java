@@ -22,6 +22,7 @@ import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
 import edu.eci.arsw.myrestaurant.services.OrderServicesException;
 import edu.eci.arsw.myrestaurant.services.RestaurantOrderServices;
 import edu.eci.arsw.myrestaurant.services.RestaurantOrderServicesStub;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -99,6 +100,18 @@ public class OrdersAPIController {
         }
         return new ResponseEntity<>(total, status);
 
+    }
+    
+    @RequestMapping("/products")
+    public ResponseEntity<?> getProducts(){
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Collection<RestaurantProduct> entry = null;
+        try {
+            entry = ros.getProducts();
+        } catch (OrderServicesException ex) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(entry,HttpStatus.ACCEPTED);
     }
     //Example code Linux: 
     //curl -i -X PUT -HContent-Type:application/json -HAccept:application/json http://localhost:8080/orders/1 -d '{"price":20,"name":"MILK","type":"DRINK"}' 
