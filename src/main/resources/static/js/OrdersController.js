@@ -73,7 +73,7 @@ function orderBuilder(orders ,products){
             var prod = {"product": productName ,"quantity": orderJson.orderAmountsMap[productName],"price": null}
             prod.price = products.filter(function (x){
                 return x.name === productName;
-            })[0].price * prod.quantity;
+            })[0].price;
             order.products.push(prod);
         }
         addOrder(order);
